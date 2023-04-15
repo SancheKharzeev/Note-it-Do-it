@@ -34,6 +34,9 @@ class TextViewVC: UIViewController {
         setupText()
         navigationSetup()
         
+        
+
+        
     }
     
     func setupText() {

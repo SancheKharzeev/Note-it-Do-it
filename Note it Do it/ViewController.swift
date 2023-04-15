@@ -17,6 +17,9 @@ class ViewController: UIViewController {
         return table
     }()
     var models = [NoteItem]()
+   
+        
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,9 +28,12 @@ class ViewController: UIViewController {
         myTableView.delegate = self
         myTableView.dataSource = self
         myTableView.frame = view.bounds
+        myTableView.register(MyCustomCell.self, forCellReuseIdentifier: "MyCell")
         view.addSubview(myTableView)
         setupUI()
         loadSavedData()
+
+        
         
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -35,15 +41,18 @@ class ViewController: UIViewController {
         loadSavedData()
     }
     
+    
     // MARK: - Button configuration
+    
     let newNoteButton: UIButton = {
         var configButton = UIButton.Configuration.filled()
         configButton.title = "Создать"
-        configButton.buttonSize = .large
+        configButton.buttonSize = .medium
         configButton.subtitle = "новую заметку"
         configButton.image = UIImage(systemName: "square.and.pencil")
         configButton.imagePlacement = .leading
         configButton.imagePadding = 8
+        configButton.cornerStyle = .capsule
 
         let button = UIButton(configuration: configButton, primaryAction: nil)
         button.addTarget(self, action: #selector(didTapCreateButton), for: .touchUpInside)
@@ -60,7 +69,9 @@ class ViewController: UIViewController {
         loadSavedData()
         
     }
+
     
+    // передача данных в другой VC при редактировании записи
     private func goToEditNote(_ note: NoteItem) {
       
         let rootVC = EditTextVC()
@@ -76,7 +87,7 @@ class ViewController: UIViewController {
     private func setupUI() {
         view.addSubview(newNoteButton)
         newNoteButton.translatesAutoresizingMaskIntoConstraints = false
-        
+
         NSLayoutConstraint.activate([
             newNoteButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -20),
             newNoteButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -152,51 +163,33 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell",
-                                                 for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell",
+                                                 for: indexPath) as! MyCustomCell
         let model = models[indexPath.row]
-        var content = cell.defaultContentConfiguration()
-        content.text = model.title
-        content.secondaryText = model.createData?.formatted(date: .abbreviated, time: .shortened)
-        content.image = UIImage(systemName: "pencil.circle")
+//        var content = cell.defaultContentConfiguration()
+//        content.text = model.title
+//        content.secondaryText = model.createData?.formatted(date: .abbreviated, time: .shortened)
+//        content.image = UIImage(systemName: "pencil.circle")
+//        cell.backgroundColor = .systemGray6
+//        cell.contentConfiguration = content
         cell.backgroundColor = .systemGray6
-        cell.contentConfiguration = content
+        cell.label.text = model.title
+        cell.dateLabel.text = model.createData?.formatted(date: .abbreviated, time: .shortened)
+        cell.buttonTapCallback = {
+            if cell.button.backgroundColor != .black {
+                cell.button.backgroundColor = .black
+                cell.backgroundColor = .clear
+            } else {
+                cell.button.backgroundColor = .systemGreen
+                cell.backgroundColor = .systemGray6
+            }
+        }
+        
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         goToEditNote(models[indexPath.row])
-/*      let item = models[indexPath.row] // создаем переменную которая указывает на выбранный объект
-        
-        // создаем всплывающий снизу алерт
-        let sheet = UIAlertController(title: "Редактировать запись",
-                                      message: nil,
-                                      preferredStyle: .actionSheet)
-        // Cancel
-        sheet.addAction(UIAlertAction(title: "Cancel",
-                                      style: .cancel))
-       
-        // EDIT item
-        sheet.addAction(UIAlertAction(title: "Редактировать", style: .default,
-                                      handler: {_ in
-            let rootVC = EditTextVC()
-            let navVC = UINavigationController(rootViewController: rootVC)
-            navVC.modalPresentationStyle = .fullScreen
-            rootVC.textView.text = item.name
-            rootVC.textField.text = item.title
-            self.present(navVC, animated: true)
-            self.deleteItem(item: item)
-            self.loadSavedData()
-        }))
-        // Delete item
-        sheet.addAction(UIAlertAction(title: "Delete",
-                                      style: .destructive,
-                                      handler: {[weak self] _ in
-            self?.deleteItem(item: item) // удаляет выделенный объект
-            self?.loadSavedData()
-        }))
-        present(sheet, animated: true)
-*/
     }
     
     
@@ -204,6 +197,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         if editingStyle == .delete {
             let item = models[indexPath.row]
             deleteItem(item: item)
+            loadSavedData()
         }
     }
     

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E2644DF329EB08CF007B0CA1 /* MyCustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2644DF229EB08CF007B0CA1 /* MyCustomCell.swift */; };
 		E2B556B629E2D29D0049C223 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B556B529E2D29D0049C223 /* AppDelegate.swift */; };
 		E2B556B829E2D29D0049C223 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B556B729E2D29D0049C223 /* SceneDelegate.swift */; };
 		E2B556BA29E2D29D0049C223 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B556B929E2D29D0049C223 /* ViewController.swift */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E2644DF229EB08CF007B0CA1 /* MyCustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCustomCell.swift; sourceTree = "<group>"; };
 		E2B556B229E2D29D0049C223 /* Note it Do it.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Note it Do it.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E2B556B529E2D29D0049C223 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E2B556B729E2D29D0049C223 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 				E2B556B729E2D29D0049C223 /* SceneDelegate.swift */,
 				E2B556C629E2D29E0049C223 /* Info.plist */,
 				E2B556BE29E2D29D0049C223 /* Note_it_Do_it.xcdatamodeld */,
+				E2644DF229EB08CF007B0CA1 /* MyCustomCell.swift */,
 			);
 			path = "Note it Do it";
 			sourceTree = "<group>";
@@ -157,6 +160,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2644DF329EB08CF007B0CA1 /* MyCustomCell.swift in Sources */,
 				E2B556BA29E2D29D0049C223 /* ViewController.swift in Sources */,
 				E2B556B629E2D29D0049C223 /* AppDelegate.swift in Sources */,
 				E2B556D129E3E4250049C223 /* TextViewVC.swift in Sources */,
