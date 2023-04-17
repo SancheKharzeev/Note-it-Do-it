@@ -12,16 +12,16 @@ class TextViewVC: UIViewController {
     let textField: UITextField = {
         let textField = UITextField()
         textField.textAlignment = .left
-        textField.backgroundColor = .systemOrange
-        textField.font = .systemFont(ofSize: 20, weight: .medium)
+        textField.backgroundColor = .white
+        textField.font = .systemFont(ofSize: 40, weight: .medium)
         textField.textColor = .black
-        textField.placeholder = "Введите название заметки"
+        textField.placeholder = "Enter name"
         return textField
     }()
     let textView: UITextView = {
         let textView = UITextView()
         textView.textAlignment = .left
-        textView.backgroundColor = .systemYellow
+        textView.backgroundColor = .white
         textView.font = .systemFont(ofSize: 20, weight: .medium)
         textView.textColor = .black
         return textView
@@ -29,14 +29,11 @@ class TextViewVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        title = "Новая заметка"
+        view.backgroundColor = .systemGray6
+        title = "New note"
+        
         setupText()
         navigationSetup()
-        
-        
-
-        
     }
     
     func setupText() {
@@ -50,22 +47,31 @@ class TextViewVC: UIViewController {
             textField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             textField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             textField.heightAnchor.constraint(equalToConstant: 100),
-            textView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 8),
+            textView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 4),
             textView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
             textView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
             textView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
         ])
     }
     func navigationSetup() {
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Назад", style: .plain, target: self, action: #selector(dismissSelf))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Back", style: .done, target: self, action: #selector(dismissSelf))
     }
     @objc func dismissSelf() {
         let vc = ViewController()
-        guard let text = textView.text,
-              let textF = textField.text,
-                !text.isEmpty else {
+        guard var text = textView.text,
+              var textF = textField.text
+        else {
             return
         }
+        
+        if text == "" {
+            text = "Unnamed note"
+            }
+
+            if textF == "" {
+                textF = "No content 😢"
+            }
+        
         vc.createItem(name: text, title: textF)
         vc.getAllItem()
         dismiss(animated: true)

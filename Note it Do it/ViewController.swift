@@ -14,6 +14,8 @@ class ViewController: UIViewController {
     var myTableView: UITableView = {
         let table = UITableView()
         table.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        table.register(HeaderTableView.self, forHeaderFooterViewReuseIdentifier: "header")
+        table.register(FooterTableView.self, forHeaderFooterViewReuseIdentifier: "footer")
         return table
     }()
     var models = [NoteItem]()
@@ -24,7 +26,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         getAllItem()
-        title = "Note it, Do it"
         myTableView.delegate = self
         myTableView.dataSource = self
         myTableView.frame = view.bounds
@@ -38,17 +39,17 @@ class ViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         getAllItem()
-        loadSavedData()
+       loadSavedData()
     }
     
     
-    // MARK: - Button configuration
+    // MARK: - new note Button configuration
     
     let newNoteButton: UIButton = {
         var configButton = UIButton.Configuration.filled()
-        configButton.title = "Создать"
+        configButton.title = "Create"
         configButton.buttonSize = .medium
-        configButton.subtitle = "новую заметку"
+        configButton.subtitle = "new note"
         configButton.image = UIImage(systemName: "square.and.pencil")
         configButton.imagePlacement = .leading
         configButton.imagePadding = 8
@@ -66,10 +67,21 @@ class ViewController: UIViewController {
         navVC.modalPresentationStyle = .fullScreen
         present(navVC, animated: true)
         getAllItem()
-        loadSavedData()
+      //  loadSavedData()
         
     }
 
+    
+    // MARK: - setupUI auto layout Button
+    private func setupUI() {
+        view.addSubview(newNoteButton)
+        newNoteButton.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            newNoteButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -20),
+            newNoteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+        ])
+    }
     
     // передача данных в другой VC при редактировании записи
     private func goToEditNote(_ note: NoteItem) {
@@ -82,17 +94,7 @@ class ViewController: UIViewController {
         present(navVC, animated: true)
         deleteItem(item: note)
     }
-    
-    // MARK: - setupUI auto layout Button
-    private func setupUI() {
-        view.addSubview(newNoteButton)
-        newNoteButton.translatesAutoresizingMaskIntoConstraints = false
-
-        NSLayoutConstraint.activate([
-            newNoteButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -20),
-            newNoteButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-        ])
-    }
+  
 
 
     // MARK: - CoreData functions
@@ -147,7 +149,6 @@ class ViewController: UIViewController {
 
         do {
             models = try context.fetch(request)
-            print("Got \(models.count) notes")
             myTableView.reloadData()
         } catch {
             print("Fetch failed")
@@ -173,14 +174,19 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 //        cell.backgroundColor = .systemGray6
 //        cell.contentConfiguration = content
         cell.backgroundColor = .systemGray6
+        
+//        let backgroundView = UIView()
+//        backgroundView.backgroundColor = .blue
+//        cell.selectedBackgroundView = backgroundView
+        
         cell.label.text = model.title
         cell.dateLabel.text = model.createData?.formatted(date: .abbreviated, time: .shortened)
         cell.buttonTapCallback = {
-            if cell.button.backgroundColor != .black {
-                cell.button.backgroundColor = .black
-                cell.backgroundColor = .clear
+            if cell.button.backgroundColor != .green {
+                cell.button.backgroundColor = .green
+                cell.backgroundColor = .systemPink
             } else {
-                cell.button.backgroundColor = .systemGreen
+                cell.button.backgroundColor = .white
                 cell.backgroundColor = .systemGray6
             }
         }
@@ -205,6 +211,15 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         return true
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: "header")
+        return header
+    }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footer = tableView.dequeueReusableHeaderFooterView(withIdentifier: "footer") as! FooterTableView
+        footer.configure(text: "\(models.count) notes")
+        return footer
+    }
 }
 
 

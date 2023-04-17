@@ -13,14 +13,15 @@ class MyCustomCell: UITableViewCell {
     
     let button: UIButton = {
         let btn = UIButton()
-        btn.setTitle("Pop", for: .normal)
-        btn.backgroundColor = .systemGreen
-        btn.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        btn.setTitle("Mark", for: .normal)
+        btn.backgroundColor = .white
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 10)
+        btn.setTitleColor(.black, for: .normal)
      //   btn.layer.masksToBounds = true
         btn.layer.cornerRadius = 18
         
         btn.layer.borderWidth = 3
-        btn.layer.borderColor = UIColor.white.cgColor
+        btn.layer.borderColor = UIColor.gray.cgColor
         
         return btn
     }()
@@ -28,7 +29,7 @@ class MyCustomCell: UITableViewCell {
     let label: UILabel = {
         let lbl = UILabel()
         lbl.font = UIFont.systemFont(ofSize: 16)
-        lbl.textColor = .systemPink
+        lbl.textColor = .black
         return lbl
     }()
     
